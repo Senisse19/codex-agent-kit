@@ -1,0 +1,40 @@
+# Local Codex runtime/state. Never publish these.
+auth.json
+history.jsonl
+session_index.jsonl
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+log/
+logs/
+sessions/
+cache/
+.tmp/
+.sandbox/
+.sandbox-*/
+app-server-daemon/
+app-server-control/
+
+# Secrets and local environment
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+
+# Dependency/build outputs
+node_modules/
+__pycache__/
+*.pyc
+dist/
+build/
+coverage/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
