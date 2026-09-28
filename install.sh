@@ -2,9 +2,14 @@
 set -euo pipefail
 
 SCOPE="global"
+TARGET="codex"
 PROJECT_PATH="$(pwd)"
+HOME_DIR="$HOME"
 NO_BACKUP="false"
 FORCE_PROJECT_AGENTS_FILE="false"
+
+CLAUDE_GLOBAL_START="<!-- agent-kit:claude-global:start -->"
+CLAUDE_GLOBAL_END="<!-- agent-kit:claude-global:end -->"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -12,8 +17,16 @@ while [[ $# -gt 0 ]]; do
       SCOPE="${2:-}"
       shift 2
       ;;
+    --target)
+      TARGET="${2:-}"
+      shift 2
+      ;;
     --project-path)
       PROJECT_PATH="${2:-}"
+      shift 2
+      ;;
+    --home)
+      HOME_DIR="${2:-}"
       shift 2
       ;;
     --no-backup)
@@ -30,10 +43,14 @@ Usage:
   ./install.sh --scope global
   ./install.sh --scope project --project-path /path/to/project
   ./install.sh --scope both --project-path /path/to/project
+  ./install.sh --target claude --scope global
+  ./install.sh --target all --scope global
 
 Options:
-  --no-backup                    Skip backup before copying
-  --force-project-agents-file     Overwrite project AGENTS.md after backup
+  --target <codex|claude|all>     Which tool to install for (default: codex)
+  --home <path>                    Override home directory (default: $HOME)
+  --no-backup                      Skip backup before copying
+  --force-project-agents-file      Overwrite project AGENTS.md after backup
 EOF
       exit 0
       ;;
@@ -43,6 +60,14 @@ EOF
       ;;
   esac
 done
+
+case "$TARGET" in
+  codex|claude|all) ;;
+  *)
+    echo "Invalid target: $TARGET. Use codex, claude, or all." >&2
+    exit 1
+    ;;
+esac
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -66,8 +91,61 @@ backup_path() {
   cp -R "$path" "$backup_root"/
 }
 
+# Merges the CLAUDE.global.md block into a CLAUDE.md file, replacing the
+# content between the agent-kit markers if present, otherwise appending it.
+merge_claude_global_block() {
+  local target="$1"
+  local block_body_file="$2"
+  local backup_root="$3"
+
+  local tmp_block
+  tmp_block="$(mktemp)"
+  {
+    printf '%s\n' "$CLAUDE_GLOBAL_START"
+    cat "$block_body_file"
+    printf '%s\n' "$CLAUDE_GLOBAL_END"
+  } > "$tmp_block"
+
+  if [[ ! -f "$target" ]]; then
+    mkdir -p "$(dirname "$target")"
+    cp "$tmp_block" "$target"
+    rm -f "$tmp_block"
+    return
+  fi
+
+  backup_path "$target" "$backup_root"
+
+  if grep -qF "$CLAUDE_GLOBAL_START" "$target" && grep -qF "$CLAUDE_GLOBAL_END" "$target"; then
+    awk -v start="$CLAUDE_GLOBAL_START" -v end="$CLAUDE_GLOBAL_END" -v blockfile="$tmp_block" '
+      BEGIN {
+        block = ""
+        while ((getline line < blockfile) > 0) { block = block line "\n" }
+        close(blockfile)
+        sub(/\n$/, "", block)
+      }
+      $0 == start { print block; skip = 1; next }
+      $0 == end { skip = 0; next }
+      skip { next }
+      { print }
+    ' "$target" > "${target}.tmp"
+    mv "${target}.tmp" "$target"
+  else
+    local existing
+    existing="$(cat "$target")"
+    {
+      if [[ -n "$existing" ]]; then
+        printf '%s\n\n' "$existing"
+      fi
+      cat "$tmp_block"
+    } > "${target}.tmp"
+    mv "${target}.tmp" "$target"
+  fi
+
+  rm -f "$tmp_block"
+}
+
 install_global() {
-  local codex_home="${CODEX_HOME:-$HOME/.codex}"
+  local codex_home="${CODEX_HOME:-$HOME_DIR/.codex}"
   local stamp
   stamp="$(date +%Y%m%d-%H%M%S)"
   local backup_root="$codex_home/backups/codex-agent-kit-$stamp"
@@ -144,19 +222,111 @@ EOF
   fi
 }
 
-case "$SCOPE" in
-  global)
-    install_global
+# Shared copy logic for the Claude Code target. Copies kit directories into
+# the given .claude root and merges CLAUDE.global.md into the given CLAUDE.md.
+install_claude_shared() {
+  local claude_root="$1"
+  local claude_md_path="$2"
+  local backup_root="$3"
+
+  mkdir -p "$claude_root"
+
+  backup_path "$claude_root/agents" "$backup_root"
+  copy_kit_directory "$SCRIPT_DIR/agents" "$claude_root/agents"
+
+  backup_path "$claude_root/skills" "$backup_root"
+  copy_kit_directory "$SCRIPT_DIR/skills" "$claude_root/skills"
+
+  backup_path "$claude_root/commands" "$backup_root"
+  copy_kit_directory "$SCRIPT_DIR/workflows" "$claude_root/commands"
+
+  backup_path "$claude_root/scripts" "$backup_root"
+  copy_kit_directory "$SCRIPT_DIR/scripts" "$claude_root/scripts"
+
+  if [[ -f "$SCRIPT_DIR/rules/CLAUDE.md" ]]; then
+    mkdir -p "$claude_root/rules"
+    backup_path "$claude_root/rules/CLAUDE.md" "$backup_root"
+    cp "$SCRIPT_DIR/rules/CLAUDE.md" "$claude_root/rules/CLAUDE.md"
+  fi
+
+  if [[ -f "$SCRIPT_DIR/ARCHITECTURE.md" ]]; then
+    backup_path "$claude_root/ARCHITECTURE.md" "$backup_root"
+    cp "$SCRIPT_DIR/ARCHITECTURE.md" "$claude_root/ARCHITECTURE.md"
+  fi
+
+  if [[ -f "$SCRIPT_DIR/CLAUDE.global.md" ]]; then
+    local block_body_file
+    block_body_file="$(mktemp)"
+    # Trim trailing blank/newline characters from the source block.
+    printf '%s\n' "$(cat "$SCRIPT_DIR/CLAUDE.global.md")" > "$block_body_file"
+    merge_claude_global_block "$claude_md_path" "$block_body_file" "$backup_root"
+    rm -f "$block_body_file"
+  fi
+}
+
+install_claude_global() {
+  local claude_home="$HOME_DIR/.claude"
+  local stamp
+  stamp="$(date +%Y%m%d-%H%M%S)"
+  local backup_root="$claude_home/backups/codex-agent-kit-claude-$stamp"
+
+  install_claude_shared "$claude_home" "$claude_home/CLAUDE.md" "$backup_root"
+
+  echo "Installed Claude Code target globally at $claude_home"
+  if [[ "$NO_BACKUP" == "false" && -d "$backup_root" ]]; then
+    echo "Backup written to $backup_root"
+  fi
+}
+
+install_claude_project() {
+  local resolved_project
+  resolved_project="$(cd "$PROJECT_PATH" && pwd)"
+  local claude_dir="$resolved_project/.claude"
+  local stamp
+  stamp="$(date +%Y%m%d-%H%M%S)"
+  local backup_root="$resolved_project/.agent-backups/codex-agent-kit-claude-$stamp"
+
+  install_claude_shared "$claude_dir" "$resolved_project/CLAUDE.md" "$backup_root"
+
+  echo "Installed Claude Code target for project at $claude_dir"
+  if [[ "$NO_BACKUP" == "false" && -d "$backup_root" ]]; then
+    echo "Backup written to $backup_root"
+  fi
+}
+
+run_codex_target() {
+  case "$SCOPE" in
+    global) install_global ;;
+    project) install_project ;;
+    both) install_global; install_project ;;
+    *)
+      echo "Invalid scope: $SCOPE. Use global, project, or both." >&2
+      exit 1
+      ;;
+  esac
+}
+
+run_claude_target() {
+  case "$SCOPE" in
+    global) install_claude_global ;;
+    project) install_claude_project ;;
+    both) install_claude_global; install_claude_project ;;
+    *)
+      echo "Invalid scope: $SCOPE. Use global, project, or both." >&2
+      exit 1
+      ;;
+  esac
+}
+
+case "$TARGET" in
+  codex)
+    run_codex_target
     ;;
-  project)
-    install_project
+  claude)
+    run_claude_target
     ;;
-  both)
-    install_global
-    install_project
-    ;;
-  *)
-    echo "Invalid scope: $SCOPE. Use global, project, or both." >&2
-    exit 1
+  all)
+    run_codex_target
+    run_claude_target
     ;;
 esac
