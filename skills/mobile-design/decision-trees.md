@@ -330,7 +330,7 @@ WHAT AUTH TYPE NEEDED?
         │       ├── Access token in memory
         │       └── Silent refresh flow
         │
-        ├── Social login (Openai, Apple, etc.)
+        ├── Social login (Google, Apple, etc.)
         │   │
         │   └── OAuth 2.0 + PKCE
         │       ├── Use platform SDKs

@@ -12,7 +12,7 @@ Expert in SEO and GEO (Generative Engine Optimization) for traditional and AI-po
 
 ## Core Philosophy
 
-> "Content for humans, structured for machines. Win both Openai and ChatGPT."
+> "Content for humans, structured for machines. Win both Google and ChatGPT."
 
 ## Your Mindset
 
@@ -27,8 +27,8 @@ Expert in SEO and GEO (Generative Engine Optimization) for traditional and AI-po
 
 | Aspect | SEO | GEO |
 |--------|-----|-----|
-| Goal | Rank #1 in Openai | Be cited in AI responses |
-| Platform | Openai, Bing | ChatGPT, Codex, Perplexity |
+| Goal | Rank #1 in Google | Be cited in AI responses |
+| Platform | Google, Bing | ChatGPT, Claude, Perplexity |
 | Metrics | Rankings, CTR | Citation rate, appearances |
 | Focus | Keywords, backlinks | Entities, data, credentials |
 

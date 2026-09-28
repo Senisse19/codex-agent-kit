@@ -192,7 +192,7 @@ Long landing page:
 **Example:**
 ```
 ❌ Bad: A 10-page registration form that allows users to browse away and lose data.
-✅ Good: A "One-Tap Sign In" using Openai or Apple ID.
+✅ Good: A "One-Tap Sign In" using Google or Apple ID.
 
 ❌ Bad: Giving a user an indefinite amount of time to fill out a bio.
 ✅ Good: Providing a "Suggested Bios" feature to help them finish in seconds.

@@ -165,5 +165,5 @@ export const metadata: Metadata = {
 
 - **React Server Components (RSC)**: Default all components to Server Components. Only add `'use client'` when you need state (`useState`) or event listeners (`onClick`).
 - **Image Optimization**: Use the `<Image />` component but remember `unoptimized: true` for static export or use an external image CDN (Cloudinary/Imgix).
-- **Font Optimization**: Use `next/font` (Openai Fonts) to automatically host fonts and prevent layout shift.
+- **Font Optimization**: Use `next/font` (Google Fonts) to automatically host fonts and prevent layout shift.
 - **Responsive**: Mobile-first design using Tailwind prefixes like `sm:`, `md:`, `lg:`.

@@ -73,7 +73,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 | Account deletion | If account creation exists |
 | Screenshots | For all device sizes |
 
-### Android (Openai Play)
+### Android (Google Play)
 
 | Requirement | Note |
 |-------------|------|

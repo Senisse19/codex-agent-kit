@@ -51,7 +51,7 @@ Android System Fonts:
 ├── Roboto Flex: Variable font (API 33+)
 ├── Roboto Serif: Serif alternative
 ├── Roboto Mono: Monospace
-└── Openai Sans: Openai products (special license)
+└── Google Sans: Google products (special license)
 ```
 
 ### Material Type Scale
@@ -534,7 +534,7 @@ This is MANDATORY for Android feel.
 ### Usage Guidelines
 
 ```
-Material Symbols: Openai's icon library
+Material Symbols: Google's icon library
 
 Styles:
 ├── Outlined: Default, most common

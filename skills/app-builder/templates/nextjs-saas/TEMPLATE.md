@@ -69,7 +69,7 @@ project-name/
 | Model | Fields (Key fields) |
 |-------|---------------------|
 | User | id, email, stripeCustomerId, subscriptionId, plan |
-| Account | OAuth provider data (Openai, GitHub...) |
+| Account | OAuth provider data (Google, GitHub...) |
 | Session | User sessions (Database strategy) |
 
 ---

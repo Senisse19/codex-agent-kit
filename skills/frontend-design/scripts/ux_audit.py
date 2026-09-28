@@ -245,13 +245,13 @@ class UXAuditor:
 
         # 2.1 Font Pairing - Too many font families
         font_families = set()
-        # Check for @font-face, Openai Fonts, font-family declarations
+        # Check for @font-face, Google Fonts, font-family declarations
         font_faces = re.findall(r'@font-face\s*\{[^}]*family:\s*["\']?([^;"\'\s}]+)', content, re.IGNORECASE)
-        openai_fonts = re.findall(r'fonts\.openaiapis\.com[^"\']*family=([^"&]+)', content, re.IGNORECASE)
+        google_fonts = re.findall(r'fonts\.googleapis\.com[^"\']*family=([^"&]+)', content, re.IGNORECASE)
         font_family_css = re.findall(r'font-family:\s*([^;]+)', content, re.IGNORECASE)
 
         for font in font_faces: font_families.add(font.strip().lower())
-        for font in openai_fonts:
+        for font in google_fonts:
             for f in font.replace('+', ' ').split('|'):
                 font_families.add(f.split(':')[0].strip().lower())
         for family in font_family_css:

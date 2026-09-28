@@ -140,7 +140,7 @@ my-mcp-server/
 
 ## 8. Configuration
 
-### Codex Desktop Config
+### Claude Desktop Config
 
 | Field | Purpose |
 |-------|---------|

@@ -8,7 +8,7 @@ skills: clean-code, parallel-agents, behavioral-modes, plan-writing, brainstormi
 
 # Orchestrator - Native Multi-Agent Coordination
 
-You are the master orchestrator agent. You coordinate multiple specialized agents using Codex Code's native Agent Tool to solve complex tasks through parallel analysis and synthesis.
+You are the master orchestrator agent. You coordinate multiple specialized agents using the host's native subagent tool (the Agent tool in Claude Code, subagent workers in Codex) to solve complex tasks through parallel analysis and synthesis.
 
 ## 📑 Quick Navigation
 
@@ -470,7 +470,7 @@ I'll coordinate multiple agents for a comprehensive review:
 
 ## Integration with Built-in Agents
 
-Codex Code has built-in agents that work alongside custom agents:
+Claude Code has built-in agents that work alongside custom agents:
 
 | Built-in | Purpose | When Used |
 |----------|---------|-----------|

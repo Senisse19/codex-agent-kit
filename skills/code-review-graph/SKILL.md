@@ -82,7 +82,7 @@ Python, TypeScript, JavaScript, Go, Rust, Java, C#, Ruby, Kotlin, Swift, PHP, C/
 ### Prerequisites
 - Python 3.9+ (`python3 --version`)
 - pip or pipx installed
-- An MCP-compatible AI client (AG Kit, Codex Code, Cursor, Windsurf, Zed)
+- An MCP-compatible AI client (AG Kit, Claude Code, Cursor, Windsurf, Zed)
 - Git-tracked codebase (for incremental updates)
 
 ### Step 1: Install the Package
@@ -105,7 +105,7 @@ pip install code-review-graph
 code-review-graph install
 
 # Or target a specific platform
-code-review-graph install --platform codex-code
+code-review-graph install --platform claude-code
 code-review-graph install --platform cursor
 code-review-graph install --platform windsurf
 ```
@@ -140,7 +140,7 @@ code-review-graph update
 
 ### Step 5: Verify Integration
 
-Open your AI client and check MCP connection. For Codex Code: run `/mcp` and confirm `code-review-graph` appears.
+Open your AI client and check MCP connection. For Claude Code: run `/mcp` and confirm `code-review-graph` appears.
 
 ---
 
@@ -256,7 +256,7 @@ Generates markdown wiki of codebase structure — every module, its public API, 
 | **Reflection-based calls** (Django signals, `getattr()`, Java reflection) | Missed edges in graph | Serena (LSP-based) is better for these codebases |
 | **Runtime-generated code** (`eval`, template engines) | Not parseable at static time | Accept limitation or exclude from graph |
 | **Cross-language boundaries** (Python calling TypeScript API) | No edges between language runtimes | Use multi-repo registration as partial workaround |
-| **Stale graph** (without watch mode) | Codex queries outdated relationships | Always run `code-review-graph update` before tasks, or use watch mode |
+| **Stale graph** (without watch mode) | Claude queries outdated relationships | Always run `code-review-graph update` before tasks, or use watch mode |
 | **TypeScript path aliases** (`@/components/...`) | May require tsconfig resolution config | Check `tsconfig_resolver.py` handles your setup |
 
 ---
@@ -266,7 +266,7 @@ Generates markdown wiki of codebase structure — every module, its public API, 
 | Tool | Approach | Pros | Cons | Best For |
 |------|----------|------|------|----------|
 | **code-review-graph** | Tree-sitter + SQLite | Fast, 19 languages, local, no deps | Static analysis only | General use, large codebases |
-| **Codextte** | Go rewrite | Single binary, no Python | Fewer languages, simpler | Python-averse teams |
+| **Claudette** | Go rewrite | Single binary, no Python | Fewer languages, simpler | Python-averse teams |
 | **Serena** | LSP-based | Deep semantic precision, type resolution | Heavy setup, slower | Polymorphism-heavy codebases |
 | **code-graph-rag** | RAG + vector search | Natural language queries | Complex setup | Codebase exploration |
 | **Native IDE context** | Editor built-in | Zero setup | No explicit blast radius | Simple projects |

@@ -51,7 +51,7 @@ Mobile clients are DIFFERENT from web clients:
 │              ┌──────────┴──────────┐                            │
 │              ▼                     ▼                            │
 │    ┌─────────────────┐   ┌─────────────────┐                    │
-│    │   FCM (Openai)  │   │  APNs (Apple)   │                    │
+│    │   FCM (Google)  │   │  APNs (Apple)   │                    │
 │    │   Firebase      │   │  Direct or FCM  │                    │
 │    └────────┬────────┘   └────────┬────────┘                    │
 │             │                     │                              │
@@ -380,7 +380,7 @@ VERIFY REAL DEVICE (not emulator/bot):
 ├── iOS: DeviceCheck API
 │   └── Server verifies with Apple
 ├── Android: Play Integrity API (replaces SafetyNet)
-│   └── Server verifies with Openai
+│   └── Server verifies with Google
 └── Fail closed: Reject if attestation fails
 ```
 

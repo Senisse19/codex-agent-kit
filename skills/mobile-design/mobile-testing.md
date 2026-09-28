@@ -312,7 +312,7 @@ MANUAL:
 
 | Service | Pros | Cons |
 |---------|------|------|
-| **Firebase Test Lab** | Free tier, Openai devices | Android focus |
+| **Firebase Test Lab** | Free tier, Google devices | Android focus |
 | **AWS Device Farm** | Wide selection | Expensive |
 | **BrowserStack** | Good UX | Expensive |
 | **Local devices** | Free, reliable | Limited variety |

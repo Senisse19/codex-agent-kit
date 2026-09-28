@@ -1,7 +1,7 @@
 ---
 name: geo-fundamentals
-description: Generative Engine Optimization for AI search engines (ChatGPT, Codex, Perplexity).
-when_to_use: "When optimizing content for AI search engines like ChatGPT, Codex, or Perplexity. Generative Engine Optimization."
+description: Generative Engine Optimization for AI search engines (ChatGPT, Claude, Perplexity).
+when_to_use: "When optimizing content for AI search engines like ChatGPT, Claude, or Perplexity. Generative Engine Optimization."
 allowed-tools: Read, Glob, Grep
 ---
 
@@ -17,14 +17,14 @@ allowed-tools: Read, Glob, Grep
 
 | Goal | Platform |
 |------|----------|
-| Be cited in AI responses | ChatGPT, Codex, Perplexity, Codex |
+| Be cited in AI responses | ChatGPT, Claude, Perplexity, Gemini |
 
 ### SEO vs GEO
 
 | Aspect | SEO | GEO |
 |--------|-----|-----|
 | Goal | #1 ranking | AI citations |
-| Platform | Openai | AI engines |
+| Platform | Google | AI engines |
 | Metrics | Rankings, CTR | Citation rate |
 | Focus | Keywords | Entities, data |
 
@@ -36,8 +36,8 @@ allowed-tools: Read, Glob, Grep
 |--------|----------------|-------------|
 | **Perplexity** | Numbered [1][2] | Highest citation rate |
 | **ChatGPT** | Inline/footnotes | Custom GPTs |
-| **Codex** | Contextual | Long-form content |
-| **Codex** | Sources section | SEO crossover |
+| **Claude** | Contextual | Long-form content |
+| **Gemini** | Sources section | SEO crossover |
 
 ---
 
@@ -95,7 +95,7 @@ How AI engines select content to cite:
 
 | Action | Purpose |
 |--------|---------|
-| Openai Knowledge Panel | Entity recognition |
+| Google Knowledge Panel | Entity recognition |
 | Wikipedia (if notable) | Authority source |
 | Consistent info across web | Entity consolidation |
 | Industry mentions | Authority signals |
@@ -109,9 +109,9 @@ How AI engines select content to cite:
 | Crawler | Engine |
 |---------|--------|
 | GPTBot | ChatGPT/OpenAI |
-| Codex-Web | Codex |
+| Claude-Web | Claude |
 | PerplexityBot | Perplexity |
-| Openaibot | Codex (shared) |
+| Googlebot | Gemini (shared) |
 
 ### Access Decision
 
