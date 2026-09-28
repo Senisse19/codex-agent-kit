@@ -6,7 +6,7 @@ This repository is intentionally a clean distribution package. It does not conta
 
 ## What Is Included
 
-- `agents/`: AG Kit-style specialist personas such as `backend-specialist`, `frontend-specialist`, and `code-reviewer`.
+- `agents/`: AG Kit-style specialist personas such as `backend-specialist`, `frontend-specialist`, and `security-auditor`.
 - `skills/`: Codex-compatible `SKILL.md` folders.
 - `workflows/`: Markdown workflow prompts.
 - `rules/`: Global rule files.
@@ -23,7 +23,13 @@ The files in `agents/` are markdown instruction profiles, not native subagent ty
 ```text
 @backend-specialist review this API design
 @frontend-specialist improve this React view
-@code-reviewer review the current diff
+@security-auditor review the current diff
+```
+
+For lightweight, checklist-style reviews without invoking a full persona, point Codex at the `code-review-checklist` skill instead:
+
+```text
+Use the code-review-checklist skill to review the current diff
 ```
 
 If you want a native runtime subagent to use a persona, ask explicitly:

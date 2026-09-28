@@ -1,110 +1,26 @@
-# Codex Cookbooks
+# CODEX.md - AG Kit
 
-A collection of Jupyter notebooks and Python examples for building with the Codex API.
+> Root-level reference doc installed alongside `ARCHITECTURE.md`. This file orients Codex (and anyone reading the install) to how AG Kit is organized for the Codex CLI.
 
-## Quick Start
+---
 
-```bash
-# Install dependencies
-uv sync --all-extras
+## What This Kit Provides
 
-# Install pre-commit hooks
-uv run pre-commit install
+- `agents/` - specialist persona instruction profiles (`@agent-name` mentions).
+- `skills/` - `SKILL.md` knowledge modules, loaded on demand via agent frontmatter.
+- `workflows/` - reusable prompt procedures.
+- `rules/CODEX.md` - the full behavioral ruleset (request classification, agent routing protocol, Socratic gate, checklist scripts). Read it before doing substantial work; treat it as always-on guidance for this workspace.
+- `scripts/` - helper scripts invoked by skills/workflows.
 
-# Set up API key
-cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
-```
+## Where To Start
 
-## Development Commands
+1. Read `ARCHITECTURE.md` for the full map of agents, skills, and workflows.
+2. Read `rules/CODEX.md` for the behavioral protocol (agent routing, Socratic gate, quality checklist).
+3. For an explicit `@agent-name` request, read `agents/<agent-name>.md`.
+4. When an agent's frontmatter declares `skills:`, read only the listed `skills/<skill>/SKILL.md` files needed for the task.
 
-```bash
-make format        # Format code with ruff
-make lint          # Run linting
-make check         # Run format-check + lint
-make fix           # Auto-fix issues + format
-make test          # Run pytest
-```
+## Native Subagents vs. Personas
 
-Or directly with uv:
+The files in `agents/` are markdown instruction profiles, not native Codex "Subagents." To use one, mention it explicitly (`@backend-specialist review this API design`) or ask Codex to spawn a native worker using the persona's instructions.
 
-```bash
-uv run ruff format .           # Format
-uv run ruff check .            # Lint
-uv run ruff check --fix .      # Auto-fix
-uv run pre-commit run --all-files
-```
-
-## Code Style
-
-- **Line length:** 100 characters
-- **Quotes:** Double quotes
-- **Formatter:** Ruff
-
-Notebooks have relaxed rules for mid-file imports (E402), redefinitions (F811), and variable naming (N803, N806).
-
-## Git Workflow
-
-**Branch naming:** `<username>/<feature-description>`
-
-**Commit format (conventional commits):**
-```
-feat(scope): add new feature
-fix(scope): fix bug
-docs(scope): update documentation
-style: lint/format
-```
-
-## Key Rules
-
-1. **API Keys:** Never commit `.env` files. Use `dotenv.load_dotenv()` then access keys via `os.environ` or `os.getenv()`
-
-2. **Dependencies:** Use `uv add <package>` or `uv add --dev <package>`. Never edit pyproject.toml directly.
-
-3. **Models:** Use current Codex models. Check docs.openai.com for latest versions.
-   - Sonnet: `codex-sonnet-4-6`
-   - Haiku: `codex-haiku-4-5`
-   - Opus: `codex-opus-4-6`
-   - **Never use dated model IDs** (e.g., `codex-sonnet-4-6-20250514`). Always use the non-dated alias.
-   - **Bedrock model IDs** follow a different format. Use the base Bedrock model ID from the docs:
-     - Opus 4.6: `openai.codex-opus-4-6-v1`
-     - Sonnet 4.5: `openai.codex-sonnet-4-5-20250929-v1:0`
-     - Haiku 4.5: `openai.codex-haiku-4-5-20251001-v1:0`
-     - Prepend `global.` for global endpoints (recommended): `global.openai.codex-opus-4-6-v1`
-     - Note: Bedrock models before Opus 4.6 require dated IDs in their Bedrock model ID.
-
-4. **Notebooks:**
-   - Keep outputs in notebooks (intentional for demonstration)
-   - One concept per notebook
-   - Test that notebooks run top-to-bottom without errors
-
-5. **Quality checks:** Run `make check` before committing. Pre-commit hooks validate formatting and notebook structure.
-
-## Slash Commands
-
-These commands are available in Codex Code and CI:
-
-- `/notebook-review` - Review notebook quality
-- `/model-check` - Validate Codex model references
-- `/link-review` - Check links in changed files
-
-## Project Structure
-
-```
-capabilities/      # Core Codex capabilities (RAG, classification, etc.)
-skills/            # Advanced skill-based notebooks
-tool_use/          # Tool use and integration patterns
-multimodal/        # Vision and image processing
-misc/              # Batch processing, caching, utilities
-third_party/       # Pinecone, Voyage, Wikipedia integrations
-extended_thinking/ # Extended reasoning patterns
-scripts/           # Validation scripts
-.codex/           # Codex Code commands and skills
-```
-
-## Adding a New Cookbook
-
-1. Create notebook in the appropriate directory
-2. Add entry to `registry.yaml` with title, description, path, authors, categories
-3. Add author info to `authors.yaml` if new contributor
-4. Run quality checks and submit PR
+See `rules/CODEX.md` for the complete, enforceable rule set.
